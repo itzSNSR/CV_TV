@@ -9,7 +9,7 @@ A lightweight Android TV client inspired by CineVault. It provides a 10-foot use
 - Home catalog with cinematic featured and continue-watching rows
 - Search and title detail screens
 - Media3/ExoPlayer playback screen
-- Compatible with Android 5.0 (API 21) and newer
+- Compatible with Android 6.0 (API 23) and newer
 
 ## Build
 
