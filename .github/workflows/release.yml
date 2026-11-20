@@ -1,0 +1,54 @@
+name: Build and release APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: GitHub release and tag name
+        required: true
+        default: v1.0-lite
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Run unit tests
+        run: ./gradlew test
+
+      - name: Build release APK
+        run: ./gradlew assembleRelease
+
+      - name: Rename release APK
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/release/app-release-unsigned.apk dist/CineVault-TV-${{ inputs.tag }}.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CineVault-TV-${{ inputs.tag }}
+          path: dist/CineVault-TV-${{ inputs.tag }}.apk
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ inputs.tag }}" \
+            dist/CineVault-TV-${{ inputs.tag }}.apk \
+            --repo "${{ github.repository }}" \
+            --target "${{ github.sha }}" \
+            --title "CineVault TV ${{ inputs.tag }}" \
+            --notes "CineVault TV Android APK release ${{ inputs.tag }}."
