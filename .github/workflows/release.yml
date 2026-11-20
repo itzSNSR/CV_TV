@@ -24,7 +24,7 @@ jobs:
           java-version: "17"
 
       - name: Run unit tests
-        run: ./gradlew test
+        run: env -u JAVA_TOOL_OPTIONS -u JAVA_OPTS -u GRADLE_OPTS -u _JAVA_OPTIONS -u JDK_JAVA_OPTIONS ./gradlew test
         continue-on-error: true
         env:
           JAVA_TOOL_OPTIONS: ""
@@ -34,7 +34,7 @@ jobs:
           JDK_JAVA_OPTIONS: ""
 
       - name: Build release APK
-        run: ./gradlew assembleRelease
+        run: env -u JAVA_TOOL_OPTIONS -u JAVA_OPTS -u GRADLE_OPTS -u _JAVA_OPTIONS -u JDK_JAVA_OPTIONS ./gradlew assembleRelease
         env:
           JAVA_TOOL_OPTIONS: ""
           JAVA_OPTS: ""
